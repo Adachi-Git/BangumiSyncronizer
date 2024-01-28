@@ -55,7 +55,7 @@ def process_item(item, auth_token, processed_ids, max_retries=3):
             # 记录已处理的 ID
             processed_ids.add(item_id)
 
-            # 延时5秒，以免对服务器造成过大压力
+            # 延时5秒
             time.sleep(5)
 
             # 跳出重试循环
