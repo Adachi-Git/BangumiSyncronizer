@@ -27,11 +27,11 @@ def process_item(item, auth_token, processed_ids, max_retries=3):
     
     # 构造发送到API的数据
     api_data = {
-        "type": 3,
+        "type": 2,
         "rate": item_rate,
-        "comment": "string",  # 可根据需要修改
+        "comment": "",  # 可根据需要修改
         "private": True,  # 可根据需要修改
-        "tags": ["string"]  # 可根据需要修改
+        "tags": [""]  # 可根据需要修改
     }
 
     # 构造API请求
@@ -57,6 +57,10 @@ def process_item(item, auth_token, processed_ids, max_retries=3):
 
             # 延时5秒
             time.sleep(5)
+
+            # 追加已处理的 ID 到文件
+            with open("processed_ids.txt", "a") as f:
+                f.write(f"{item_id}\n")
 
             # 跳出重试循环
             break
@@ -88,7 +92,7 @@ def main():
         pass
 
     # 替换为你的实际认证令牌
-    auth_token = ''
+    auth_token = '****************************'
 
     # 使用 ThreadPoolExecutor 实现并发处理
     with ThreadPoolExecutor() as executor:
