@@ -4,6 +4,7 @@ import math
 import random
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import os
 
 def calculate_rate(score):
     # 对于评分为 0，始终返回 0
@@ -73,8 +74,11 @@ def process_item(item, auth_token, processed_ids, max_retries=3):
         print(f"Subject ID {item_id} failed after {max_retries} retries. Check log for details.")
 
 def main():
-    # 从外部JSON文件加载数据
-    input_file_path = r"C:\Users\Darling\Desktop\1.json"  # 替换为你实际的JSON文件路径
+    # 获取当前脚本所在的路径
+    script_path = os.path.dirname(os.path.abspath(__file__))
+
+    # 构建 JSON 文件的完整路径
+    input_file_path = os.path.join(script_path, "subject.json")
     with open(input_file_path, "r", encoding="utf-8") as input_file:
         json_data = json.load(input_file)
 
@@ -87,12 +91,13 @@ def main():
     # 加载已处理的 ID 记录
     try:
         with open(processed_ids_file, "r") as f:
-            processed_ids = set(map(int, f.read().splitlines()))
+            # 使用过滤函数确保只有有效的整数值被添加到集合中
+            processed_ids = set(map(int, filter(str.isdigit, f.read().splitlines())))
     except FileNotFoundError:
         pass
 
     # 替换为你的实际认证令牌
-    auth_token = '****************************'
+    auth_token = '*************************'
 
     # 使用 ThreadPoolExecutor 实现并发处理
     with ThreadPoolExecutor() as executor:
